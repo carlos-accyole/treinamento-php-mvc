@@ -4,23 +4,19 @@ namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Curso;
 use Alura\Cursos\Infra\EntityManagerCreator;
+use Doctrine\Common\Persistence\ObjectRepository;
 
-class FormularioEdicao implements InterfaceControladorRequisicao
+class FormularioEdicao extends ControllerComHtml implements InterfaceControladorRequisicao
 {
-
     /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var \Doctrine\Common\Persistence\ObjectRepository
+     * @var ObjectRepository
      */
     private $cursoRepository;
 
     public function __construct()
     {
-        $this->entityManager = (new EntityManagerCreator())->getEntityManager();
-        $this->cursoRepository = $this->entityManager->getRepository(Curso::class);
+        $entityManager = (new EntityManagerCreator())->getEntityManager();
+        $this->cursoRepository = $entityManager->getRepository(Curso::class);
     }
 
     public function processaRequisicao(): void
@@ -33,11 +29,15 @@ class FormularioEdicao implements InterfaceControladorRequisicao
 
         if (is_null($id) || $id === false) {
             header('Location: /listar-cursos');
+            return;
         }
 
-        /** @var Curso $curso */
         $curso = $this->cursoRepository->find($id);
-        $titulo = 'Alterar Curso ' . $curso->getDescricao();
-        require __DIR__ . '/../../view/cursos/formulario.php';
+        echo $this->renderizaHtml('cursos/formulario.php',
+            [
+                'curso' => $curso,
+                'tutulo' => 'Alterar curso' . $curso->getDescricao()
+            ]
+        );
     }
 }
