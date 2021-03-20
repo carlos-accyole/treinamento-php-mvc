@@ -3,10 +3,13 @@
 namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Curso;
+use Alura\Cursos\Helper\RenderizadorDeHtmlTrait;
 use Alura\Cursos\Infra\EntityManagerCreator;
 
-class ListarCursos extends ControllerComHtml implements InterfaceControladorRequisicao
+class ListarCursos implements InterfaceControladorRequisicao
 {
+    use RenderizadorDeHtmlTrait;
+
     private $repositorioDeCursos;
 
     public function __construct()
@@ -21,7 +24,7 @@ class ListarCursos extends ControllerComHtml implements InterfaceControladorRequ
         echo $this->renderizaHtml('cursos/listar-cursos.php',
             [
                 'cursos' => $this->repositorioDeCursos->findAll(),
-                'tutulo' => 'Listar Cursos'
+                'titulo' => 'Listar Cursos'
             ]
         );
     }

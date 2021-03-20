@@ -3,10 +3,12 @@
 namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Curso;
+use Alura\Cursos\Helper\FlashMessageTrait;
 use Alura\Cursos\Infra\EntityManagerCreator;
 
 class Exclusao implements InterfaceControladorRequisicao
 {
+    use FlashMessageTrait;
 
     /**
      * @var \Doctrine\ORM\EntityManagerInterface
@@ -27,12 +29,14 @@ class Exclusao implements InterfaceControladorRequisicao
         );
 
         if (is_null($id) || $id === false) {
+            $this->defineMenssagem('danger', 'Curso Inexixtente');
             header('Location: /listar-cursos');
         }
 
         $curso = $this->entityManager->getReference(Curso::class, $id);
         $this->entityManager->remove($curso);
         $this->entityManager->flush();
+        $this->defineMenssagem('success','Curso Excluído com Sucesso');
         header('Location: /listar-cursos');
     }
 }

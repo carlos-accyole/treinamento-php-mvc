@@ -3,11 +3,14 @@
 namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Curso;
+use Alura\Cursos\Helper\RenderizadorDeHtmlTrait;
 use Alura\Cursos\Infra\EntityManagerCreator;
 use Doctrine\Common\Persistence\ObjectRepository;
 
-class FormularioEdicao extends ControllerComHtml implements InterfaceControladorRequisicao
+class FormularioEdicao implements InterfaceControladorRequisicao
 {
+    use RenderizadorDeHtmlTrait;
+
     /**
      * @var ObjectRepository
      */
@@ -36,7 +39,7 @@ class FormularioEdicao extends ControllerComHtml implements InterfaceControlador
         echo $this->renderizaHtml('cursos/formulario.php',
             [
                 'curso' => $curso,
-                'tutulo' => 'Alterar curso' . $curso->getDescricao()
+                'titulo' => 'Alterar curso' . $curso->getDescricao()
             ]
         );
     }
